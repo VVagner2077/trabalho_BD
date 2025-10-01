@@ -1,0 +1,19 @@
+erDiagram
+    Hospedes {
+        int id_hospede PK "Chave Primária"
+        varchar(100) nome "Nome do Hóspede"
+        varchar(11) telefone "Telefone do Hóspede"
+        varchar(100) email "Email do Hóspede"
+        varchar(15) telefone "Telefone do Hóspede"
+    }
+
+        Reservas {
+        int id_reserva PK "Chave Primária"
+        int id_hospede FK "Chave Estrangeira referenciando Hospedes"
+        varchar(20) status "Status da Reserva"
+        date data_checkin "Data de Check-in"
+        date data_checkout "Data de Check-out"
+        float valor_total "Valor Total da Reserva"
+        }
+
+    Hospedes ||--o{ Reservas : "Faz"
