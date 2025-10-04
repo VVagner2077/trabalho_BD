@@ -1,19 +1,26 @@
 erDiagram
-    Hospedes {
-        int id_hospede PK "Chave Primária"
-        varchar(100) nome "Nome do Hóspede"
-        varchar(11) telefone "Telefone do Hóspede"
-        varchar(100) email "Email do Hóspede"
-        varchar(15) telefone "Telefone do Hóspede"
+    Cliente {
+        int id_cliente PK
+        varchar(100) nome
+        varchar(11) telefone
+        varchar(14) cpf
     }
 
-        Reservas {
-        int id_reserva PK "Chave Primária"
-        int id_hospede FK "Chave Estrangeira referenciando Hospedes"
-        varchar(20) status "Status da Reserva"
-        date data_checkin "Data de Check-in"
-        date data_checkout "Data de Check-out"
-        float valor_total "Valor Total da Reserva"
-        }
+    Betoneira {
+        int id_betoneira PK
+        varchar(100) modelo
+        boolean status "True para Disponível, False para Alugado"
+        float valor "Preço da diária"
+    }
 
-    Hospedes ||--o{ Reservas : "Faz"
+    Aluguel{
+        int id_aluguel PK
+        int id_cliente FK
+        int id_betoneira FK
+        date data_retirada "Data da retirada"
+        date data_devolucao "Data de devolução"
+    }
+
+    -- Adicionando as linhas de relacionamento --
+    Cliente ||--o{ Aluguel : "faz"
+    Betoneira ||--o{ Aluguel : "é objeto de"
