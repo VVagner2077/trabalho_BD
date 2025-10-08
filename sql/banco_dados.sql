@@ -20,4 +20,4 @@ CREATE TABLE Alugueis (
     data_devolucao DATE NOT NULL,
     FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente),
     FOREIGN KEY (id_betoneira) REFERENCES Betoneiras(id_betoneira)
-);
+    )
