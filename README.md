@@ -6,4 +6,3 @@ Professor **Howard** – FAESA
 
 ## 📅 Status  
 📍 Em andamento – Estrutura inicial criada, conteúdo será adicionado em breve.  
-qualquer coisa

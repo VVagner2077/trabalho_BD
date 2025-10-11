@@ -8,7 +8,7 @@ CREATE TABLE Clientes (
 CREATE TABLE Betoneiras (
     id_betoneira INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(100) NOT NULL,
-    status boolean NOT NULL,
+    statuss BOOLEAN NOT NULL,
     valor DECIMAL(10,2) NOT NULL
 );
 
