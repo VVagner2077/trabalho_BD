@@ -9,7 +9,7 @@ CREATE TABLE Betoneiras (
     id_betoneira INT AUTO_INCREMENT PRIMARY KEY,
     modelo VARCHAR(100) NOT NULL,
     statuss BOOLEAN NOT NULL,
-    valor DECIMAL(10,2) NOT NULL
+    valor FLOAT NOT NULL
 );
 
 CREATE TABLE Alugueis (

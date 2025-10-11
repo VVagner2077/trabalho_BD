@@ -1,24 +1,24 @@
 erDiagram
     Cliente {
-        int id_cliente PK
-        varchar(100) nome
-        varchar(11) telefone
-        varchar(14) cpf
+        int id_cliente PK "Not Null"
+        varchar(100) nome "Not Null"
+        varchar(11) telefone "Not Null"
+        varchar(14) cpf "Not Null"
     }
 
     Betoneira {
-        int id_betoneira PK
-        varchar(100) modelo
-        boolean status "True para Disponível, False para Alugado"
-        float valor "Preço da diária"
+        int id_betoneira PK "Not Null"
+        varchar(100) modelo  "Not Null"
+        boolean statuss   "Not Null"
+        float valor   "Not Null"
     }
 
     Aluguel{
-        int id_aluguel PK
-        int id_cliente FK
-        int id_betoneira FK
-        date data_retirada "Data da retirada"
-        date data_devolucao "Data de devolução"
+        int id_aluguel PK "Not Null"
+        int id_cliente FK "Not Null"
+        int id_betoneira FK "Not Null"
+        date data_retirada "Not Null"
+        date data_devolucao "Not Null"
     }
 
     Cliente ||--o{ Aluguel : "faz"
