@@ -1,23 +1,27 @@
-CREATE TABLE Clientes (
-    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    telefone VARCHAR(11) NOT NULL,
-    cpf VARCHAR(14) NOT NULL
+drop table if exists alugueis;
+drop table if exists betoneiras;
+drop table if exists clientes;
+
+create table clientes(
+id_cliente int generated always as identity primary key,
+nome varchar(100) not null,
+telefone varchar(11) not null,
+cpf varchar(14) not null
 );
 
-CREATE TABLE Betoneiras (
-    id_betoneira INT AUTO_INCREMENT PRIMARY KEY,
-    modelo VARCHAR(100) NOT NULL,
-    statuss BOOLEAN NOT NULL,
-    valor FLOAT NOT NULL
+create table betoneiras(
+id_betoneira int generated always as identity primary key,
+modelo varchar(100) not null,
+statuss boolean not null,
+valor real not null
 );
 
-CREATE TABLE Alugueis (
-    id_aluguel INT AUTO_INCREMENT PRIMARY KEY,
-    id_cliente INT NOT NULL,
-    id_betoneira INT NOT NULL,
-    data_inicio DATE NOT NULL,
-    data_devolucao DATE NOT NULL,
-    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente),
-    FOREIGN KEY (id_betoneira) REFERENCES Betoneiras(id_betoneira)
-    )
+create table alugueis(
+id_aluguel int generated always as  identity primary key,
+id_cliente int not null,
+id_betoneira int not null,
+data_inicio date not null,
+data_fim date not null,
+foreign key(id_cliente) references clientes(id_cliente),
+foreign key(id_betoneira) references betoneiras(id_betoneira)
+);

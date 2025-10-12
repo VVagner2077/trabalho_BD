@@ -10,15 +10,15 @@ erDiagram
         int id_betoneira PK "Not Null"
         varchar(100) modelo  "Not Null"
         boolean statuss   "Not Null"
-        float valor   "Not Null"
+        real valor   "Not Null"
     }
 
     Aluguel{
         int id_aluguel PK "Not Null"
         int id_cliente FK "Not Null"
         int id_betoneira FK "Not Null"
-        date data_retirada "Not Null"
-        date data_devolucao "Not Null"
+        date data_inicio "Not Null"
+        date data_fim "Not Null"
     }
 
     Cliente ||--o{ Aluguel : "faz"
