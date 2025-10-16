@@ -1,91 +1,165 @@
-alugueis = []
-proximo_id = 1
+# Funções de CRUD para betoneiras (serão implementadas aqui)
+def adicionar_betoneira():
+    raise NotImplementedError
 
-while True:
-    print("\n========================================")
-    print("  Sistema de Aluguel de Betoneiras")
-    print("========================================")
-    print("1. Adicionar Aluguel")
-    print("2. Listar Todos os Aluguéis")
-    print("3. Atualizar Aluguel")
-    print("4. Deletar Aluguel")
-    print("5. Sair")
-    print("========================================")
-    
-    escolha = input("Escolha uma opção: ")
+def listar_betoneiras():
+    raise NotImplementedError
 
-    # --- 1. ADICIONAR ---
-    if escolha == '1':
-        cliente = input("Nome do Cliente: ")
-        modelo = input("Modelo da Betoneira: ")
+def atualizar_betoneira():
+    raise NotImplementedError
+
+def remover_betoneira():
+    raise NotImplementedError
+
+# Função para o submenu de gerenciamento de betoneiras
+def gerenciar_betoneiras():
+    while True:
+        # Mostra o menu do CRUD que discutimos antes
+        escolha_crud = input('''
+========================================
+      CADASTRO DE BETONEIRAS (CRUD)
+========================================
+
+[1] Adicionar nova betoneira (Create)
+[2] Listar todas as betoneiras (Read)
+[3] Atualizar dados de uma betoneira (Update)
+[4] Remover uma betoneira (Delete)
+[5] Voltar ao Menu Principal
+
+----------------------------------------
+
+Escolha uma opção: ''')
         
-        novo_aluguel = {
-            'id': proximo_id,
-            'cliente': cliente,
-            'modelo': modelo
-        }
-        alugueis.append(novo_aluguel)
-        
-        print(f"-> Aluguel ID {proximo_id} adicionado com sucesso!")
-        proximo_id += 1
-
-    # --- 2. LISTAR ---
-    elif escolha == '2':
-        if not alugueis:
-            print("-> Nenhum aluguel cadastrado.")
+        # Aqui viria a lógica para chamar as funções do CRUD
+        if escolha_crud == '1':
+            print("\n-- Adicionando Nova Betoneira --")
+            # adicionar_betoneira()
+        elif escolha_crud == '2':
+            print("\n-- Listando Todas as Betoneiras --")
+            # listar_betoneiras()
+        elif escolha_crud == '3':
+            print("\n-- Atualizando Betoneira --")
+            # atualizar_betoneira()
+        elif escolha_crud == '4':
+            print("\n-- Removendo Betoneira --")
+            # remover_betoneira()
+        elif escolha_crud == '5':
+            print("\nRetornando ao menu principal...")
+            break # Quebra o loop e volta para o menu principal
         else:
-            for aluguel in alugueis:
-                print(f"ID: {aluguel['id']} | Cliente: {aluguel['cliente']} | Modelo: {aluguel['modelo']}")
+            print("\nOpção inválida! Tente novamente.")
 
-    # --- 3. ATUALIZAR ---
-    elif escolha == '3':
+
+def gerenciar_clientes():
+    while True:
+        # Mostra o menu do CRUD que discutimos antes
+        escolha_crud = input('''
+========================================
+      Gerenciamento de Clientes (CRUD)
+========================================
+
+[1] Adicionar novo cliente (Create)
+[2] Listar todos os clientes (Read)
+[3] Atualizar dados de um cliente (Update)
+[4] Remover um cliente (Delete)
+[5] Voltar ao Menu Principal
+
+----------------------------------------
+
+Escolha uma opção: ''')
+        
+        # Aqui viria a lógica para chamar as funções do CRUD
+        if escolha_crud == '1':
+            print("\n-- Adicionando Novo Cliente --")
+            # adicionar_cliente()
+        elif escolha_crud == '2':
+            print("\n-- Listando Todos os Clientes --")
+            # listar_clientes()
+        elif escolha_crud == '3':
+            print("\n-- Atualizando Cliente --")
+            # atualizar_cliente()
+        elif escolha_crud == '4':
+            print("\n-- Removendo Cliente --")
+            # remover_cliente()
+        elif escolha_crud == '5':
+            print("\nRetornando ao menu principal...")
+            break # Quebra o loop e volta para o menu principal
+        else:
+            print("\nOpção inválida! Tente novamente.")
+
+def registrar_novo_aluguel():
+    raise NotImplementedError
+
+def registrar_devolucao():
+    raise NotImplementedError
+
+
+def listar_alugueis_ativos():
+    raise NotImplementedError
+
+def listar_betoneiras_disponiveis():
+    raise NotImplementedError
+
+def historico_alugueis():
+    raise NotImplementedError
+
+# Menu principal
+def menu():
+    while True:
+        escolha_str = input('''
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   GERENCIADOR DE ALUGUEL DE BETONEIRAS          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+MENU PRINCIPAL
+
+--- OPERAÇÕES DE ALUGUEL ---
+[1] Registrar Novo Aluguel
+[2] Registrar Devolução
+
+--- CADASTROS ---
+[3] Gerenciar Clientes
+[4] Gerenciar Betoneiras (CRUD)
+
+--- CONSULTAS E RELATÓRIOS ---
+[5] Listar Aluguéis Ativos
+[6] Listar Betoneiras Disponíveis
+[7] Histórico de Aluguéis
+
+--- SISTEMA ---
+[8] Sair
+
+---------------------------------------------------
+
+Digite o número da opção desejada: ''')
+        
+        # Tratamento de erro
         try:
-            id_para_atualizar = int(input("ID do aluguel para atualizar: "))
-            
-            encontrado = False
-            for aluguel in alugueis:
-                if aluguel['id'] == id_para_atualizar:
-                    novo_cliente = input(f"Novo nome para '{aluguel['cliente']}': ")
-                    novo_modelo = input(f"Novo modelo para '{aluguel['modelo']}': ")
-                    
-                    aluguel['cliente'] = novo_cliente
-                    aluguel['modelo'] = novo_modelo
-                    
-                    print("-> Aluguel atualizado!")
-                    encontrado = True
-                    break
-            
-            if not encontrado:
-                print("-> ID não encontrado.")
-                
+            escolha = int(escolha_str)
+            if not (1 <= escolha <= 8):
+                print(f"\nERRO: ({escolha}) é um número fora do intervalo válido (1-8). Tente novamente.")
+                continue # Pula para a próxima iteração do loop
         except ValueError:
-            print("-> ID inválido. Digite um número.")
+            print(f"\nERRO: ({escolha_str}) não é um número. Tente novamente.")
+            continue # Pula para a próxima iteração do loop
 
-    # --- 4. DELETAR ---
-    elif escolha == '4':
-        try:
-            id_para_deletar = int(input("ID do aluguel para deletar: "))
-            
-            aluguel_para_remover = None
-            for aluguel in alugueis:
-                if aluguel['id'] == id_para_deletar:
-                    aluguel_para_remover = aluguel
-                    break
-            
-            if aluguel_para_remover:
-                alugueis.remove(aluguel_para_remover)
-                print("-> Aluguel deletado!")
-            else:
-                print("-> ID não encontrado.")
+        if escolha == 1:
+            registrar_novo_aluguel()
+        elif escolha == 2:
+            registrar_devolucao()
+        elif escolha == 3:
+            gerenciar_clientes()
+        elif escolha == 4:
+            gerenciar_betoneiras() # Chama o submenu do CRUD
+        elif escolha == 5:
+            listar_alugueis_ativos()
+        elif escolha == 6:
+            listar_betoneiras_disponiveis()
+        elif escolha == 7:
+            historico_alugueis() # Agora na opção correta
+        elif escolha == 8:
+            print("\nSaindo do sistema. Até logo!")
+            break # Encerra o loop e o programa
 
-        except ValueError:
-            print("-> ID inválido. Digite um número.")
-
-    # --- 5. SAIR ---
-    elif escolha == '5':
-        print("Saindo do programa...")
-        break # Quebra o loop 'while True' e encerra o programa
-
-    # --- OPÇÃO INVÁLIDA ---
-    else:
-        print("-> Opção inválida, tente novamente.")
+# Inicia o programa
+menu()
