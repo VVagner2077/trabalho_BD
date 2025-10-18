@@ -19,23 +19,24 @@ def gerenciar_betoneiras():
 Escolha uma opção: ''')
         
         # Aqui viria a lógica para chamar as funções do CRUD
-        if escolha_crud == '1':
-            print("\n-- Adicionando Nova Betoneira --")
-            # adicionar_betoneira()
-        elif escolha_crud == '2':
-            print("\n-- Listando Todas as Betoneiras --")
-            # listar_betoneiras()
-        elif escolha_crud == '3':
-            print("\n-- Atualizando Betoneira --")
-            # atualizar_betoneira()
-        elif escolha_crud == '4':
-            print("\n-- Removendo Betoneira --")
-            # remover_betoneira()
-        elif escolha_crud == '5':
-            print("\nRetornando ao menu principal...")
-            break # Quebra o loop e volta para o menu principal
-        else:
-            print("\nOpção inválida! Tente novamente.")
+        match escolha_crud:
+            case '1':
+                print("\n-- Adicionando Nova Betoneira --")
+                adicionar_betoneira()
+            case '2':
+                print("\n-- Listando Todas as Betoneiras --")
+                listar_betoneiras()
+            case '3':
+                print("\n-- Atualizando Betoneira --")
+                atualizar_betoneira()
+            case '4':
+                print("\n-- Removendo Betoneira --")
+                remover_betoneira()
+            case '5':
+                print("\nRetornando ao menu principal...")
+                break # Quebra o loop e volta para o menu principal
+            case _:
+                print("\nOpção inválida! Tente novamente.")
 
 # Funções de CRUD para betoneiras (serão implementadas aqui)
 def adicionar_betoneira():
