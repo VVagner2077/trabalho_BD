@@ -72,23 +72,24 @@ def gerenciar_clientes():
 Escolha uma opção: ''')
         
         # Aqui viria a lógica para chamar as funções do CRUD
-        if escolha_crud == '1':
-            print("\n-- Adicionando Novo Cliente --")
-            adicionar_cliente()
-        elif escolha_crud == '2':
-            print("\n-- Listando Todos os Clientes --")
-            listar_clientes()
-        elif escolha_crud == '3':
-            print("\n-- Atualizando Cliente --")
-            atualizar_cliente()
-        elif escolha_crud == '4':
-            print("\n-- Removendo Cliente --")
-            remover_cliente()
-        elif escolha_crud == '5':
-            print("\nRetornando ao menu principal...")
-            break # Quebra o loop e volta para o menu principal
-        else:
-            print("\nOpção inválida! Tente novamente.")
+        match escolha_crud:
+            case '1':
+                print("\n-- Adicionando Novo Cliente --")
+                adicionar_cliente()
+            case '2':
+                print("\n-- Listando Todos os Clientes --")
+                listar_clientes()
+            case '3':
+                print("\n-- Atualizando Cliente --")
+                atualizar_cliente()
+            case '4':
+                print("\n-- Removendo Cliente --")
+                remover_cliente()
+            case '5':
+                print("\nRetornando ao menu principal...")
+                break # Quebra o loop e volta para o menu principal
+            case _:
+                print("\nOpção inválida! Tente novamente.")
 
 # Funções de CRUD para clientes (serão implementadas aqui)
 def adicionar_cliente():
@@ -166,23 +167,30 @@ Digite o número da opção desejada: ''')
             print(f"\nERRO: ({escolha_str}) não é um número. Tente novamente.")
             continue # Pula para a próxima iteração do loop
 
-        if escolha == 1:
-            registrar_novo_aluguel()
-        elif escolha == 2:
-            registrar_devolucao()
-        elif escolha == 3:
-            gerenciar_clientes()
-        elif escolha == 4:
-            gerenciar_betoneiras() # Chama o submenu do CRUD
-        elif escolha == 5:
-            listar_alugueis_ativos()
-        elif escolha == 6:
-            listar_betoneiras_disponiveis()
-        elif escolha == 7:
-            historico_alugueis() # Agora na opção correta
-        elif escolha == 8:
-            print("\nSaindo do sistema. Até logo!")
-            break # Encerra o loop e o programa
-
+        match escolha:
+            case 1:
+                print("\n-- Registrando Novo Aluguel --")
+                registrar_novo_aluguel()
+            case 2:
+                print("\n-- Registrando Devolução --")
+                registrar_devolucao()
+            case 3:
+                print("\n-- Gerenciando Clientes --")
+                gerenciar_clientes()
+            case 4:
+                print("\n-- Gerenciando Betoneiras --")
+                gerenciar_betoneiras()
+            case 5:
+                print("\n-- Listando Aluguéis Ativos --")
+                listar_alugueis_ativos()
+            case 6:
+                print("\n-- Listando Betoneiras Disponíveis --")
+                listar_betoneiras_disponiveis()
+            case 7:
+                print("\n-- Histórico de Aluguéis --")
+                historico_alugueis()
+            case 8:
+                print("\nSaindo do sistema. Até logo!")
+                break # Sai do loop e termina o programa
 # Inicia o programa
 menu()
