@@ -1,16 +1,4 @@
-# Funções de CRUD para betoneiras (serão implementadas aqui)
-def adicionar_betoneira():
-    raise NotImplementedError
-
-def listar_betoneiras():
-    raise NotImplementedError
-
-def atualizar_betoneira():
-    raise NotImplementedError
-
-def remover_betoneira():
-    raise NotImplementedError
-
+import input 
 # Função para o submenu de gerenciamento de betoneiras
 def gerenciar_betoneiras():
     while True:
@@ -49,6 +37,21 @@ Escolha uma opção: ''')
         else:
             print("\nOpção inválida! Tente novamente.")
 
+# Funções de CRUD para betoneiras (serão implementadas aqui)
+def adicionar_betoneira():
+    input.modelo("Digite o modelo da betoneira: ")
+    input.valor("Digite o valor da betoneira: ")
+
+def listar_betoneiras():
+    raise NotImplementedError
+
+def atualizar_betoneira():
+    raise NotImplementedError
+
+def remover_betoneira():
+    raise NotImplementedError
+
+#--------------------------------------------------------------------------
 
 def gerenciar_clientes():
     while True:
@@ -71,22 +74,41 @@ Escolha uma opção: ''')
         # Aqui viria a lógica para chamar as funções do CRUD
         if escolha_crud == '1':
             print("\n-- Adicionando Novo Cliente --")
-            # adicionar_cliente()
+            adicionar_cliente()
         elif escolha_crud == '2':
             print("\n-- Listando Todos os Clientes --")
-            # listar_clientes()
+            listar_clientes()
         elif escolha_crud == '3':
             print("\n-- Atualizando Cliente --")
-            # atualizar_cliente()
+            atualizar_cliente()
         elif escolha_crud == '4':
             print("\n-- Removendo Cliente --")
-            # remover_cliente()
+            remover_cliente()
         elif escolha_crud == '5':
             print("\nRetornando ao menu principal...")
             break # Quebra o loop e volta para o menu principal
         else:
             print("\nOpção inválida! Tente novamente.")
 
+# Funções de CRUD para clientes (serão implementadas aqui)
+def adicionar_cliente():
+    input.nome("Digite o nome do cliente: ")
+    input.telefone("Digite o telefone do cliente: ")
+    input.cpf("Digite o CPF do cliente: ")
+
+def listar_clientes():
+    raise NotImplementedError
+
+def atualizar_cliente():
+    raise NotImplementedError
+
+def remover_cliente():
+    raise NotImplementedError
+
+#--------------------------------------------------------------------------
+
+
+# Funções para operações de aluguel
 def registrar_novo_aluguel():
     raise NotImplementedError
 
@@ -94,6 +116,7 @@ def registrar_devolucao():
     raise NotImplementedError
 
 
+# Funções para consultas e relatórios
 def listar_alugueis_ativos():
     raise NotImplementedError
 

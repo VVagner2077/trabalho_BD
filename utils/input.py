@@ -1,9 +1,9 @@
 
 #Inputs Betoneira
-def input_modelo():
+def modelo(texto):
     
     while True:
-        modelo = input("Digite o modelo: ")
+        modelo = input(texto)
 
         if (len(modelo) < 3):
             print("Modelo deve ter 3 ou mais caracteres\n ")
@@ -13,10 +13,10 @@ def input_modelo():
             break
     return modelo
 
-def input_valor():
+def valor(texto):
 
     while True:
-        valor = input("Degite o valor: ")
+        valor = input(texto)
         
         try:
             valor = float(valor)
@@ -32,10 +32,10 @@ def input_valor():
     return valor
 
 #Inputs Clintes
-def input_nome():
+def nome(texto):
     
     while True:
-        cliente = input("Digite o nome do cliente: ")
+        cliente = input(texto)
 
         if (len(cliente) < 3):
             print("O Nome deve ter 3 ou mais caracteres\n ")
@@ -45,10 +45,10 @@ def input_nome():
             break
     return cliente
 
-def input_telefone():
+def telefone(texto):
     
     while True:
-        telefone = input("Digite o nome do cliente: ")
+        telefone = input(texto)
 
         telefone = telefone.replace("(","").replace(")","").replace("-","").replace(" ","")
         
@@ -64,9 +64,9 @@ def input_telefone():
 
     return telefone
 
-def input_cpf():
+def cpf(texto):
     while True:
-        cpf_str = input("Digite seu CPF: ")
+        cpf_str = input(texto)
 
         # 1. Limpeza e validações iniciais (da abordagem 1)
         cpf_limpo = cpf_str.replace(".", "").replace("-", "").replace(" ","")
@@ -117,7 +117,7 @@ def input_cpf():
 
 from datetime import date, datetime
 
-def input_data():
+def data(texto):
     hoje = date.today()
     
 
@@ -130,7 +130,7 @@ def input_data():
     
     while True:
         # Atualizamos o texto de exemplo para o usuário
-        data_str = input("Digite uma data (ex: 17/10/2025 ou 17102025): ")
+        data_str = input(texto)
         data_inserida = None
 
         # Limpa a string de entrada para ser mais tolerante (remove espaços extras)
