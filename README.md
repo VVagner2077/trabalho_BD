@@ -101,8 +101,8 @@ Para garantir que suas credenciais secretas do banco de dados não sejam enviada
 
 -   **Professor Howard** - FAESA
 
-## 👥 Autor
+## 👥 Autores
 
--   [**Seu Nome Completo**]
--   [**Nome do Colega 1 (se houver)**]
--   [**Nome do Colega 2 (se houver)**]
+-   Gabriel Rodrigo Lapa Rocha
+-   Micael Ribeiro dos Santos
+-   Wagner dos Santos Cristo
