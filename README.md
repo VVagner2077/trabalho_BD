@@ -1,108 +1,175 @@
-# Sistema de Aluguel de Betoneiras
 
-![Status](https://img.shields.io/badge/status-em%20andamento-yellow)
+<p align="center">
+  <img src="./assets/banner.jpg" alt="Sistema de Aluguer de Betoneiras" height="500">
+</p>
 
-Repositório criado para o desenvolvimento do trabalho da disciplina de Banco de Dados, da faculdade FAESA. O projeto consiste em um sistema em Python para gerenciar o aluguel de betoneiras, controlando clientes, equipamentos e os respectivos aluguéis.
+# 🧱 Sistema de Aluguer de Betoneiras
+
+Repositório criado para o desenvolvimento do trabalho da disciplina de **Base de Dados** da **FAESA**.
+O projeto consiste num **sistema em Python** para gerir o **aluguer de betoneiras**, controlando **clientes**, **equipamentos** e os **respetivos alugueres**.
+
+---
 
 ## 💻 Tecnologias Utilizadas
 
--   **Linguagem:** Python
--   **SGBD:** PostgreSQL
--   **Hospedagem DB:** Aiven (Banco de Dados como Serviço - DBaaS)
--   **Bibliotecas Python:**
-    -   `psycopg2-binary`: Driver de conexão para o PostgreSQL.
-    -   `python-dotenv`: Para gerenciamento de variáveis de ambiente (credenciais do banco).
+**Linguagem:**
+
+<img src="https://img.shields.io/badge/Python-3.9+-blue?logo=python&logoColor=white" alt="Python">
+
+**SGBD:**
+
+<img src="https://img.shields.io/badge/PostgreSQL-15-blue?logo=postgresql&logoColor=white" alt="PostgreSQL">
+
+**Bibliotecas Python:**
+
+* `psycopg2-binary` → Driver de ligação com PostgreSQL
+* `python-dotenv` → Gestão de variáveis de ambiente
+* `pandas` → Exibição de relatórios formatados
+
+**Containerização:**
+
+<img src="https://img.shields.io/badge/Docker-Suportado-2496ED?logo=docker&logoColor=white" alt="Docker">
+
+---
 
 ## 📂 Estrutura do Projeto
 
 ```
-/
-├── .env.example            # Arquivo de exemplo para variáveis de ambiente
-├── conex/
-│   └── database.py           # Módulo de conexão (lê as variáveis do .env)
+
+trabalho_BD/
+├── .env                  # Ficheiro local com as credenciais
+├── .env.example          # Exemplo do ficheiro .env
+│
+├── conexion/
+│   └── database.py       # Módulo de ligação com a base de dados
+│
 ├── controller/
 │   ├── alugueis_controller.py
 │   ├── betoneira_controller.py
 │   └── cliente_controller.py
+│
 ├── diagrams/
-│   ├── Diagrama.png
-│   └── diagrama.mmd
-├── model/
-│   ├── Alugueis.py
-│   ├── Betoneiras.py
-│   └── Cliente.py
-├── reports/
-│   └── relatorios.py
+│   └── diagrama_final.mmd
+│
+├── pesquisa/
+│   └── pesquisa.py       # Módulo para consultas e relatórios
+│
 ├── sql/
-│   └── banco_dados.sql       # Script SQL para criação das tabelas
-└── requirements.txt        # Lista de dependências Python
-```
+│   └── banco_dados.sql   # Script SQL para criação das tabelas
+│
+├── utils/
+│   ├── inputs_tratados.py
+│   └── menu.py
+│
+├── Dockerfile            # Ficheiro para criar a imagem Docker
+├── main.py               # Ponto de entrada da aplicação
+└── requirements.txt      # Lista de dependências Python
+
+````
+
+---
 
 ## 🚀 Começando
 
-Siga as instruções abaixo para configurar e executar o projeto em seu ambiente local.
+### 🧩 Pré-requisitos
 
-### Pré-requisitos
+* Python **3.9+**
+* Git
+* Docker *(opcional, para execução em container)*
 
--   Python 3.x
--   Git
+---
 
-### Instalação
+### ⚙️ Instalação
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/seu-usuario/trabalho_BD.git](https://github.com/seu-usuario/trabalho_BD.git)
-    cd trabalho_BD
-    ```
+Clone o repositório:
 
-2.  **Crie e ative um ambiente virtual:**
-    ```bash
-    # Para Windows
-    python -m venv venv
-    .\venv\Scripts\activate
+```bash
+git clone <URL_DO_SEU_REPOSITORIO>
+cd trabalho_BD
+````
 
-    # Para Linux/Mac
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
+Crie e ative um ambiente virtual:
 
-3.  **Instale as dependências:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+**Windows:**
 
-4.  **Configure as Variáveis de Ambiente:**
-    -   Crie um arquivo chamado `.env` na pasta raiz do projeto (no mesmo nível de `requirements.txt`).
-    -   Adicione ao arquivo `.env` as suas credenciais do banco de dados do Aiven, seguindo o exemplo abaixo:
+```bash
+python -m venv venv
+.\venv\Scripts\activate
+```
 
-    ```ini
-    DB_HOST=seu-host-do-aiven.aivencloud.com
-    DB_PORT=sua_porta
-    DB_NAME=seu_banco_de_dados
-    DB_USER=seu_usuario
-    DB_PASS=sua_senha
-    ```
-    -   O arquivo `conex/database.py` utilizará a biblioteca `python-dotenv` para ler essas credenciais com segurança.
+**Linux / Mac:**
 
-5.  **Execute o programa:**
-    ```bash
-    python nome_do_arquivo_principal.py
-    ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-### 🔒 Segurança (Importante)
+Instale as dependências:
 
-Para garantir que suas credenciais secretas do banco de dados não sejam enviadas ao GitHub, crie um arquivo chamado `.gitignore` na raiz do projeto (se ainda não existir) e adicione a seguinte linha a ele:
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 🔧 Configuração do Ambiente
+
+1. Crie um ficheiro chamado **`.env`** na pasta `trabalho_BD`.
+2. Copie o conteúdo do ficheiro **`.env.example`** para dentro do novo `.env`.
+3. Preencha a variável `DB_URL` com a sua **URL de ligação completa** do PostgreSQL.
+
+---
+
+### 🗃️ Preparar a Base de Dados
+
+1. Certifique-se de que o PostgreSQL está ativo.
+2. Execute o script abaixo para criar as tabelas:
+
+   ```bash
+   psql -U <seu_usuario> -d <sua_base> -f sql/banco_dados.sql
+   ```
+3. Inicie o programa:
+
+   ```bash
+   python -m trabalho_BD.main
+   ```
+
+---
+
+## 🐳 Execução com Docker
+
+**Construir a imagem:**
+
+```bash
+docker build -t aluguer-betoneiras .
+```
+
+**Executar o container:**
+
+```bash
+docker run -it --rm --env-file .env aluguer-betoneiras
+```
+
+---
+
+## 🔒 Segurança
+
+Para proteger suas credenciais, garanta que o ficheiro `.gitignore` contenha a seguinte linha:
 
 ```
 .env
 ```
 
+---
+
 ## 👨‍🏫 Orientador
 
--   **Professor Howard** - FAESA
+**Professor:** Howard — FAESA
+
+---
 
 ## 👥 Autores
 
--   Gabriel Rodrigo Lapa Rocha
--   Micael Ribeiro dos Santos
--   Wagner dos Santos Cristo
+* **Gabriel Rodrigo Lapa Rocha**
+* **Micael Ribeiro dos Santos**
+* **Wagner dos Santos Cristo**
