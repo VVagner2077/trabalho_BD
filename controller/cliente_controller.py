@@ -1,11 +1,9 @@
-# Importa a função de conexão do arquivo database.py (na mesma pasta)
-from .database import get_db_connection
-import sys # Usado para imprimir erros simples
+from ..conex.database import get_db_connection
+import sys
 
 def cadastrar_cliente(nome, telefone, cpf):
     """
     Cadastra um novo cliente no banco de dados.
-    Assume que a coluna 'cpf' na tabela 'clientes' é UNIQUE.
     """
     conn = None
     try:
@@ -17,14 +15,13 @@ def cadastrar_cliente(nome, telefone, cpf):
             sql = "INSERT INTO clientes (nome, telefone, cpf) VALUES (%s, %s, %s)"
             cursor.execute(sql, (nome, telefone, cpf))
         
-        conn.commit() # Salva a transação
+        conn.commit()
         return "Cliente cadastrado com sucesso!"
 
     except Exception as e:
         if conn:
-            conn.rollback() # Desfaz a transação em caso de erro
+            conn.rollback()
         
-        # Verifica se foi um erro de duplicidade de CPF
         if "duplicate key" in str(e) or "UNIQUE constraint" in str(e):
             return "Erro: CPF já cadastrado."
             
@@ -62,7 +59,6 @@ def listar_clientes():
 def atualizar_cliente(id_cliente, novo_nome, novo_telefone):
     """
     Atualiza o nome e/ou telefone de um cliente existente pelo ID.
-    (Normalmente não se atualiza CPF).
     """
     conn = None
     try:
@@ -76,7 +72,6 @@ def atualizar_cliente(id_cliente, novo_nome, novo_telefone):
         
         conn.commit()
         
-        # cursor.rowcount diz quantas linhas foram afetadas
         if cursor.rowcount == 0:
             return "Erro: Cliente não encontrado (ID inválido)."
             
@@ -116,7 +111,6 @@ def deletar_cliente(id_cliente):
         if conn:
             conn.rollback()
         
-        # Verifica se foi um erro de Foreign Key (cliente tem aluguéis)
         if "foreign key" in str(e):
             return "Erro: Não é possível deletar cliente que possui aluguéis registrados."
             
@@ -125,3 +119,8 @@ def deletar_cliente(id_cliente):
     finally:
         if conn:
             conn.close()
+
+if __name__ == "__main__":
+    print("--- ATENÇÃO ---")
+    print("Este arquivo não deve ser executado diretamente.")
+    print("Execute o 'main.py' na pasta raiz do projeto.")
