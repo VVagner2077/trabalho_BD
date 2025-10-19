@@ -38,7 +38,7 @@ O projeto consiste num **sistema em Python** para gerir o **aluguer de betoneira
 
 trabalho_BD/
 ├── .env                  # Ficheiro local com as credenciais
-├── .env.example          # Exemplo do ficheiro .env
+|
 │
 ├── conexion/
 │   └── database.py       # Módulo de ligação com a base de dados
