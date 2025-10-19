@@ -1,4 +1,4 @@
-import inputs_tratados as inputs_tratados
+from . import inputs_tratados
 # Função para o submenu de gerenciamento de betoneiras
 def gerenciar_betoneiras():
     while True:
@@ -55,7 +55,7 @@ def listar_betoneiras():
 def atualizar_betoneira():
 
     id = input("Digite o ID da betoneira que deseja atualizar")
-    #função select betoneira por id
+    #pesquisar betoneira por id
     nome = inputs_tratados("Atualize o nome do modelo (deixe vazio se não querer atualizar):").strip
     valor = inputs_tratados("Atualize o valor(deixe vazio se não querer atualizar):").split
     if(nome==""):
@@ -74,6 +74,7 @@ def atualizar_betoneira():
 
 def remover_betoneira():
     id = input("Digite o ID da betoneira que deseja remover")
+
     #função delete
     print(f"Betoneira com ID {id} removida.")
 
@@ -124,7 +125,7 @@ def adicionar_cliente():
     telefone = inputs_tratados("Digite o telefone do cliente: ")
     cpf = inputs_tratados("Digite o CPF do cliente: ")
     # Aqui você pode salvar 'nome', 'telefone' e 'cpf' em uma lista, banco de dados, etc.
-    
+
     print(f"Cliente cadastrado: nome={nome}, telefone={telefone}, cpf={cpf}")
     inputs_tratados.telefone("Digite o telefone do cliente: ")
     inputs_tratados.cpf("Digite o CPF do cliente: ")
@@ -132,7 +133,7 @@ def adicionar_cliente():
 
 
 def listar_clientes():
-    #função
+    #função select todos os clientes (select * from clientes)
     input("\npressione qualquer botão para voltar")
 
 def atualizar_cliente():
@@ -162,10 +163,15 @@ def remover_cliente():
 
 # Funções para operações de aluguel
 def registrar_novo_aluguel():
-    raise NotImplementedError
+    input("id betoneira)")
+    input("id cliente)")
+    input("data inicio)")
+    input("data fim)")
+    #função inserir aluguel
 
 def registrar_devolucao():
-    raise NotImplementedError
+    input("id aluguel)")
+    #função atualizar aluguel
 
 
 # Funções para consultas e relatórios
