@@ -1,4 +1,6 @@
 from . import inputs_tratados
+# Coloque isso logo abaixo das suas importações
+
 # Função para o submenu de gerenciamento de betoneiras
 def gerenciar_betoneiras():
     while True:
@@ -173,10 +175,41 @@ def registrar_devolucao():
     input("id aluguel)")
     #função atualizar aluguel
 
-
-# Funções para consultas e relatórios
 def listar_alugueis_ativos():
-    raise NotImplementedError
+    """
+    Busca no controller e exibe todos os aluguéis com status 'ativo'.
+    """
+    # A linha "limpar_tela()" foi removida.
+    # Adicionei um '\n' para dar um espaço.
+    print("\n=========================================") 
+    print("--- 5. Listar Aluguéis Ativos ---")
+    print("=========================================")
+    
+    # Chama o controller para buscar os dados
+    alugueis, msg = alugueis_controller.listar_alugueis_ativos()
+    
+    # Verifica se a consulta ao banco deu certo
+    if alugueis is not None:
+        
+        # Verifica se a lista de aluguéis não está vazia
+        if len(alugueis) > 0:
+            print(f"{len(alugueis)} aluguéis ativos encontrados:")
+            
+            for aluguel in alugueis:
+                # Ajuste os índices [0], [1], [2] etc. 
+                # para bater com a ordem das colunas da sua tabela
+                print("-" * 25)
+                print(f"  ID Aluguel: {aluguel[0]}")
+                print(f"  ID Cliente: {aluguel[1]}")
+                print(f"  ID Betoneira: {aluguel[2]}")
+                # Exemplo para datas (pode ser aluguel[4], aluguel[5], etc.)
+                # print(f"  Data Início: {aluguel[4]}") 
+        else:
+            # A consulta funcionou, mas não retornou nenhum aluguel
+            print("Nenhum aluguel ativo encontrado no banco de dados.")
+    else:
+        # Se 'alugueis' for None, 'msg' tem o erro vindo do controller
+        print(f"Erro ao consultar o banco de dados: {msg}") 
 
 def listar_betoneiras_disponiveis():
     raise NotImplementedError
