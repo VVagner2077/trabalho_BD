@@ -1,4 +1,4 @@
-import input 
+import inputs_tratados as inputs_tratados
 # Função para o submenu de gerenciamento de betoneiras
 def gerenciar_betoneiras():
     while True:
@@ -40,17 +40,42 @@ Escolha uma opção: ''')
 
 # Funções de CRUD para betoneiras (serão implementadas aqui)
 def adicionar_betoneira():
-    input.modelo("Digite o modelo da betoneira: ")
-    input.valor("Digite o valor da betoneira: ")
+    modelo = inputs_tratados("Digite o modelo da betoneira: ")
+    valor = inputs_tratados("Digite o valor da betoneira: ")
+
+    #função adicionar
+    
+    print(f"Betoneira cadastrada: modelo={modelo}, valor={valor}")
 
 def listar_betoneiras():
-    raise NotImplementedError
+    #função
+    input("\npressione qualquer botão para voltar")
+
 
 def atualizar_betoneira():
-    raise NotImplementedError
+
+    id = input("Digite o ID da betoneira que deseja atualizar")
+    #função select betoneira por id
+    nome = inputs_tratados("Atualize o nome do modelo (deixe vazio se não querer atualizar):").strip
+    valor = inputs_tratados("Atualize o valor(deixe vazio se não querer atualizar):").split
+    if(nome==""):
+        #select sem nome
+        print("select com valor")
+    elif(valor==""):
+        #select sem valor
+        print("select sem valor")
+    else:
+        #select com os dois
+        print("select com os dois")
+
+
+
+
 
 def remover_betoneira():
-    raise NotImplementedError
+    id = input("Digite o ID da betoneira que deseja remover")
+    #função delete
+    print(f"Betoneira com ID {id} removida.")
 
 #--------------------------------------------------------------------------
 
@@ -92,17 +117,42 @@ Escolha uma opção: ''')
             case _:
                 print("\nOpção inválida! Tente novamente.")
 
-# Funções de CRUD para clientes (serão implementadas aqui)
+
+
 def adicionar_cliente():
-    input.nome("Digite o nome do cliente: ")
-    input.telefone("Digite o telefone do cliente: ")
-    input.cpf("Digite o CPF do cliente: ")
+    nome = inputs_tratados("Digite o nome do cliente: ")
+    telefone = inputs_tratados("Digite o telefone do cliente: ")
+    cpf = inputs_tratados("Digite o CPF do cliente: ")
+    # Aqui você pode salvar 'nome', 'telefone' e 'cpf' em uma lista, banco de dados, etc.
+    
+    print(f"Cliente cadastrado: nome={nome}, telefone={telefone}, cpf={cpf}")
+    inputs_tratados.telefone("Digite o telefone do cliente: ")
+    inputs_tratados.cpf("Digite o CPF do cliente: ")
+
+
 
 def listar_clientes():
-    raise NotImplementedError
+    #função
+    input("\npressione qualquer botão para voltar")
 
 def atualizar_cliente():
-    raise NotImplementedError
+    id = input("Digite o ID do cliente que deseja atualizar")
+    #função select cliente por id
+    nome = inputs_tratados("Atualize o nome do cliente (deixe vazio se não quiser atualizar):").strip
+    telefone = inputs_tratados("Atualize o telefone (deixe vazio se não quiser atualizar):").strip
+    cpf = inputs_tratados("Atualize o CPF (deixe vazio se não quiser atualizar):").strip
+    if(nome==""):
+        #select sem nome
+        print("select com telefone e cpf")
+    elif(telefone==""):
+        #select sem telefone
+        print("select com nome e cpf")
+    elif(cpf==""):
+        #select sem cpf
+        print("select com nome e telefone")
+    else:
+        #select com os dois
+        print("select com os três")
 
 def remover_cliente():
     raise NotImplementedError
