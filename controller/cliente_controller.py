@@ -1,74 +1,66 @@
-from ..conex.database import get_db_connection
+from conexion import database
 import sys
 
 def cadastrar_cliente(nome, telefone, cpf):
-    """
-    Cadastra um novo cliente no banco de dados.
-    """
+
     conn = None
     try:
-        conn = get_db_connection()
+        conn = database.criar_conexao()
         if not conn:
-            return "Erro: Não foi possível conectar ao banco."
+            return "Erro: Não foi possível conectar ao banco de dados."
 
         with conn.cursor() as cursor:
             sql = "INSERT INTO clientes (nome, telefone, cpf) VALUES (%s, %s, %s)"
             cursor.execute(sql, (nome, telefone, cpf))
         
         conn.commit()
-        return "Cliente cadastrado com sucesso!"
+        return "Cliente registado com sucesso!"
 
     except Exception as e:
         if conn:
             conn.rollback()
         
-        if "duplicate key" in str(e) or "UNIQUE constraint" in str(e):
-            return "Erro: CPF já cadastrado."
-            
-        print(f"Erro inesperado [cadastrar_cliente]: {e}", file=sys.stderr)
-        return "Erro ao cadastrar cliente."
-    finally:
-        if conn:
-            conn.close()
-
-def listar_clientes():
-    """
-    Lista todos os clientes cadastrados.
-    Retorna uma lista de tuplas.
-    """
-    conn = None
-    try:
-        conn = get_db_connection()
-        if not conn:
-            return None, "Erro de conexão."
+      
+        error_msg = str(e).lower()
+        if "violates unique constraint" in error_msg:
+            if "clientes_cpf_key" in error_msg:
+                return "Erro: O CPF informado já está registado."
+            if "clientes_telefone_key" in error_msg:
+                return "Erro: O telefone informado já está registado."
         
-        with conn.cursor() as cursor:
-            sql = "SELECT id, nome, telefone, cpf FROM clientes ORDER BY nome"
-            cursor.execute(sql)
-            clientes = cursor.fetchall()
-            
-        return clientes, "Consulta realizada com sucesso."
-
-    except Exception as e:
-        print(f"Erro inesperado [listar_clientes]: {e}", file=sys.stderr)
-        return None, "Erro ao listar clientes."
+        print(f"Erro inesperado [cadastrar_cliente]: {e}", file=sys.stderr)
+        return "Erro ao registar cliente."
     finally:
         if conn:
             conn.close()
 
 def atualizar_cliente(id_cliente, novo_nome, novo_telefone):
-    """
-    Atualiza o nome e/ou telefone de um cliente existente pelo ID.
-    """
+    
     conn = None
+    partes_sql = []
+    valores = []
+
+    
+    if novo_nome:
+        partes_sql.append("nome = %s")
+        valores.append(novo_nome)
+    if novo_telefone:
+        partes_sql.append("telefone = %s")
+        valores.append(novo_telefone)
+    
+    if not partes_sql:
+        return "Nenhuma informação fornecida para atualização."
+    
+    valores.append(id_cliente)
+    
     try:
-        conn = get_db_connection()
+        conn = database.criar_conexao()
         if not conn:
-            return "Erro: Não foi possível conectar ao banco."
+            return "Erro: Não foi possível conectar ao banco de dados."
 
         with conn.cursor() as cursor:
-            sql = "UPDATE clientes SET nome = %s, telefone = %s WHERE id = %s"
-            cursor.execute(sql, (novo_nome, novo_telefone, id_cliente))
+            sql = f"UPDATE clientes SET {', '.join(partes_sql)} WHERE id = %s"
+            cursor.execute(sql, valores)
         
         conn.commit()
         
@@ -80,6 +72,11 @@ def atualizar_cliente(id_cliente, novo_nome, novo_telefone):
     except Exception as e:
         if conn:
             conn.rollback()
+        
+        error_msg = str(e).lower()
+        if "violates unique constraint" in error_msg and "clientes_telefone_key" in error_msg:
+            return "Erro: O novo telefone informado já pertence a outro cliente."
+
         print(f"Erro inesperado [atualizar_cliente]: {e}", file=sys.stderr)
         return "Erro ao atualizar cliente."
     finally:
@@ -87,14 +84,12 @@ def atualizar_cliente(id_cliente, novo_nome, novo_telefone):
             conn.close()
 
 def deletar_cliente(id_cliente):
-    """
-    Deleta um cliente do banco de dados pelo ID.
-    """
+
     conn = None
     try:
-        conn = get_db_connection()
+        conn = database.criar_conexao()
         if not conn:
-            return "Erro: Não foi possível conectar ao banco."
+            return "Erro: Não foi possível conectar ao banco de dados."
 
         with conn.cursor() as cursor:
             sql = "DELETE FROM clientes WHERE id = %s"
@@ -105,22 +100,18 @@ def deletar_cliente(id_cliente):
         if cursor.rowcount == 0:
             return "Erro: Cliente não encontrado (ID inválido)."
             
-        return "Cliente deletado com sucesso!"
+        return "Cliente apagado com sucesso!"
 
     except Exception as e:
         if conn:
             conn.rollback()
         
-        if "foreign key" in str(e):
-            return "Erro: Não é possível deletar cliente que possui aluguéis registrados."
+        if "foreign key" in str(e).lower():
+            return "Erro: Não é possível apagar um cliente que possui um histórico de alugueres."
             
         print(f"Erro inesperado [deletar_cliente]: {e}", file=sys.stderr)
-        return "Erro ao deletar cliente."
+        return "Erro ao apagar cliente."
     finally:
         if conn:
             conn.close()
 
-if __name__ == "__main__":
-    print("--- ATENÇÃO ---")
-    print("Este arquivo não deve ser executado diretamente.")
-    print("Execute o 'main.py' na pasta raiz do projeto.")
