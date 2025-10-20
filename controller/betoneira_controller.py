@@ -1,97 +1,99 @@
-from ..conex.database import get_db_connection
+from conexion import database
 import sys
 
-def cadastrar_betoneira(modelo, marca):
-    """
-    Cadastra uma nova betoneira no banco de dados.
-    O status inicial é sempre 'disponivel'.
-    """
+def cadastrar_betoneira(modelo, valor):
+
     conn = None
     try:
-        conn = get_db_connection()
+        conn = database.criar_conexao()
         if not conn:
-            return "Erro: Não foi possível conectar ao banco."
+            return "Erro: Não foi possível conectar ao banco de dados."
 
         with conn.cursor() as cursor:
-            sql = "INSERT INTO betoneiras (modelo, marca, status) VALUES (%s, %s, 'disponivel')"
-            cursor.execute(sql, (modelo, marca))
+            sql = "INSERT INTO betoneiras (modelo, valor, status) VALUES (%s, %s, 'disponivel')"
+            cursor.execute(sql, (modelo, valor))
         
         conn.commit()
-        return "Betoneira cadastrada com sucesso!"
+        return "Betoneira registada com sucesso!"
 
     except Exception as e:
         if conn:
             conn.rollback()
         print(f"Erro inesperado [cadastrar_betoneira]: {e}", file=sys.stderr)
-        return "Erro ao cadastrar betoneira."
+        return "Erro ao registar betoneira."
     finally:
         if conn:
             conn.close()
 
-def listar_betoneiras():
-    """
-    Lista TODAS as betoneiras cadastradas (disponíveis ou não).
-    Retorna uma lista de tuplas.
-    """
+def atualizar_dados_betoneira(id_betoneira, novo_modelo, novo_valor):
+
     conn = None
+    partes_sql = []
+    valores = []
+
+    if novo_modelo:
+        partes_sql.append("modelo = %s")
+        valores.append(novo_modelo)
+    if novo_valor is not None:
+        partes_sql.append("valor = %s")
+        valores.append(novo_valor)
+    
+    if not partes_sql:
+        return "Nenhuma informação fornecida para atualização."
+        
+    valores.append(id_betoneira)
+
     try:
-        conn = get_db_connection()
+        conn = database.criar_conexao()
         if not conn:
-            return None, "Erro de conexão."
+            return "Erro: Não foi possível conectar ao banco de dados."
         
         with conn.cursor() as cursor:
-            sql = "SELECT id, modelo, marca, status FROM betoneiras ORDER BY id"
-            cursor.execute(sql)
-            betoneiras = cursor.fetchall()
+            sql = f"UPDATE betoneiras SET {', '.join(partes_sql)} WHERE id = %s"
+            cursor.execute(sql, valores)
             
-        return betoneiras, "Consulta realizada com sucesso."
+            conn.commit()
 
-    except Exception as e:
-        print(f"Erro inesperado [listar_betoneiras]: {e}", file=sys.stderr)
-        return None, "Erro ao listar betoneiras."
-    finally:
-        if conn:
-            conn.close()
-
-def listar_betoneiras_disponiveis():
-    """
-    Lista apenas as betoneiras com status 'disponivel'.
-    """
-    conn = None
-    try:
-        conn = get_db_connection()
-        if not conn:
-            return None, "Erro de conexão."
-        
-        with conn.cursor() as cursor:
-            sql = "SELECT id, modelo, marca FROM betoneiras WHERE status = 'disponivel' ORDER BY id"
-            cursor.execute(sql)
-            betoneiras = cursor.fetchall()
+            if cursor.rowcount == 0:
+                return "Erro: Betoneira não encontrada (ID inválido)."
             
-        return betoneiras, "Consulta realizada com sucesso."
-
+            return "Dados da betoneira atualizados com sucesso!"
+    
     except Exception as e:
-        print(f"Erro inesperado [listar_betoneiras_disponiveis]: {e}", file=sys.stderr)
-        return None, "Erro ao listar betoneiras."
+        if conn:
+            conn.rollback()
+        print(f"Erro inesperado [atualizar_dados_betoneira]: {e}", file=sys.stderr)
+        return "Erro ao atualizar dados da betoneira."
     finally:
         if conn:
             conn.close()
 
-def atualizar_status_betoneira(id_betoneira, novo_status):
-    """
-    Atualiza o status de uma betoneira (ex: 'disponivel', 'alugada', 'manutencao').
-    """
+def atualizar_status_manutencao(id_betoneira, novo_status):
+
     conn = None
     try:
-        conn = get_db_connection()
+        conn = database.criar_conexao()
         if not conn:
-            return "Erro: Não foi possível conectar ao banco."
+            return "Erro: Não foi possível conectar ao banco de dados."
         
-        status_validos = ['disponivel', 'alugada', 'manutencao']
-        if novo_status not in status_validos:
-            return f"Erro: Status '{novo_status}' não é válido. Use: {status_validos}."
+        if novo_status == 'alugada':
+            return "Erro: O status 'alugada' é definido automaticamente ao registrar um aluguel."
+
+        status_permitidos = ['disponivel', 'manutencao']
+        if novo_status not in status_permitidos:
+            return f"Erro: Status '{novo_status}' não é válido para operação manual."
 
         with conn.cursor() as cursor:
+            cursor.execute("SELECT status FROM betoneiras WHERE id = %s", (id_betoneira,))
+            resultado = cursor.fetchone()
+            
+            if not resultado:
+                return "Erro: Betoneira não encontrada."
+            
+            status_atual = resultado[0]
+            if status_atual == 'alugada':
+                return "Erro: Não é possível alterar o status de uma betoneira que está alugada."
+
             sql = "UPDATE betoneiras SET status = %s WHERE id = %s"
             cursor.execute(sql, (novo_status, id_betoneira))
         
@@ -105,22 +107,19 @@ def atualizar_status_betoneira(id_betoneira, novo_status):
     except Exception as e:
         if conn:
             conn.rollback()
-        print(f"Erro inesperado [atualizar_status_betoneira]: {e}", file=sys.stderr)
+        print(f"Erro inesperado [atualizar_status_manutencao]: {e}", file=sys.stderr)
         return "Erro ao atualizar status."
     finally:
         if conn:
             conn.close()
 
 def deletar_betoneira(id_betoneira):
-    """
-    Deleta uma betoneira do banco de dados pelo ID.
-    Só permite deletar se não estiver alugada.
-    """
+
     conn = None
     try:
-        conn = get_db_connection()
+        conn = database.criar_conexao()
         if not conn:
-            return "Erro: Não foi possível conectar ao banco."
+            return "Erro: Não foi possível conectar ao banco de dados."
 
         with conn.cursor() as cursor:
             sql_check = "SELECT status FROM betoneiras WHERE id = %s"
@@ -130,32 +129,24 @@ def deletar_betoneira(id_betoneira):
             if not resultado:
                 return "Erro: Betoneira não encontrada."
             if resultado[0] == 'alugada':
-                return "Erro: Não é possível deletar uma betoneira que está alugada."
+                return "Erro: Não é possível apagar uma betoneira que está atualmente alugada."
             
             sql_delete = "DELETE FROM betoneiras WHERE id = %s"
             cursor.execute(sql_delete, (id_betoneira,))
         
         conn.commit()
         
-        if cursor.rowcount == 0:
-            return "Erro: Betoneira não encontrada (ID inválido)."
-            
-        return "Betoneira deletada com sucesso!"
+        return "Betoneira apagada com sucesso!"
 
     except Exception as e:
         if conn:
             conn.rollback()
         
-        if "foreign key" in str(e):
-            return "Erro: Não é possível deletar betoneira que possui histórico de aluguéis."
+        if "foreign key" in str(e).lower():
+            return "Erro: Não é possível apagar a betoneira, pois ela possui um histórico de alugueres."
             
         print(f"Erro inesperado [deletar_betoneira]: {e}", file=sys.stderr)
-        return "Erro ao deletar betoneira."
+        return "Erro ao apagar betoneira."
     finally:
         if conn:
             conn.close()
-
-if __name__ == "__main__":
-    print("--- ATENÇÃO ---")
-    print("Este arquivo não deve ser executado diretamente.")
-    print("Execute o 'main.py' na pasta raiz do projeto.")
