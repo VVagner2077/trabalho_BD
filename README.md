@@ -152,16 +152,6 @@ docker run -it --rm --env-file .env aluguer-betoneiras
 
 ---
 
-## 🔒 Segurança
-
-Para proteger suas credenciais, garanta que o ficheiro `.gitignore` contenha a seguinte linha:
-
-```
-.env
-```
-
----
-
 ## 👨‍🏫 Orientador
 
 **Professor:** Howard — FAESA
