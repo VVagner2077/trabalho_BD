@@ -36,7 +36,7 @@ O projeto consiste num **sistema em Python** para gerir o **aluguer de betoneira
 
 ```
 
-trabalho_BD/
+Sistema_de_aluguel_de_betoneira/
 ├── .env                  # Ficheiro local com as credenciais
 |
 │
@@ -84,8 +84,8 @@ trabalho_BD/
 Clone o repositório:
 
 ```bash
-git clone <URL_DO_SEU_REPOSITORIO>
-cd trabalho_BD
+git clone https://github.com/VVagner2077/Sistema_de_aluguel_de_betoneira.git
+cd Sistema_de_aluguel_de_betoneira
 ````
 
 Crie e ative um ambiente virtual:
