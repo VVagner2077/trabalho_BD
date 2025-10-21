@@ -1,92 +1,166 @@
 import pandas as pd
 from conexion import database
+import sys
+import warnings
 
-# -------------------------------
-# BETONEIRAS
-# -------------------------------
 
-def listar_betoneiras():
-    conexao = None
+def listar_todos_clientes():
+
+    conn = None
     try:
-        conexao = database.criar_conexao()
-        df = pd.read_sql("SELECT * FROM betoneiras ORDER BY id_betoneira", conexao)
-        print(df if not df.empty else "❌ Nenhuma betoneira encontrada.")
-    except Exception as e:
-        print("❌ Erro ao listar betoneiras:", e)
-    finally:
-        if conexao:
-            conexao.close()
+        conn = database.criar_conexao()
+        if not conn:
+            print("\n>> Erro de conexão.")
+            return
 
+        sql = "SELECT id, nome, telefone, cpf FROM clientes ORDER BY nome"
+        
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            df = pd.read_sql(sql, conn)
 
-# -------------------------------
-# CLIENTES
-# -------------------------------
-
-def listar_clientes():
-    conexao = None
-    try:
-        conexao = database.criar_conexao()
-        df = pd.read_sql("SELECT * FROM clientes ORDER BY id_cliente", conexao)
-        print(df if not df.empty else "❌ Nenhum cliente encontrado.")
-    except Exception as e:
-        print("❌ Erro ao listar clientes:", e)
-    finally:
-        if conexao:
-            conexao.close()
-
-# -------------------------------
-# CONSULTAS E RELATÓRIOS
-# -------------------------------
-
-def listar_alugueis_ativos():
-    conexao = None
-    try:
-        conexao = database.criar_conexao()
-        sql = "SELECT * FROM alugueis WHERE status='TRUE' ORDER BY data_aluguel"
-        df = pd.read_sql(sql, conexao)
         if df.empty:
-            print("❌ Nenhum aluguel ativo encontrado.")
+            print("\n>> Nenhum cliente registado.")
         else:
-            print("\n🔎 Aluguéis ativos:\n")
-            print(df)
-    except Exception as e:
-        print(f"❌ Erro ao listar aluguéis ativos: {e}")
-    finally:
-        if conexao:
-            conexao.close()
+            print("\n--- Lista de Clientes ---")
+            print(df.to_string(index=False))
 
+    except Exception as e:
+        print(f"\n>> Erro inesperado ao listar clientes: {e}", file=sys.stderr)
+    finally:
+        if conn:
+            conn.close()
+
+def listar_todas_betoneiras():
+
+    conn = None
+    try:
+        conn = database.criar_conexao()
+        if not conn:
+            print("\n>> Erro de conexão.")
+            return
+            
+        sql = "SELECT id, modelo, valor, status FROM betoneiras ORDER BY id"
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            df = pd.read_sql(sql, conn)
+
+        if df.empty:
+            print("\n>> Nenhuma betoneira registada.")
+        else:
+            print("\n--- Lista de Betoneiras ---")
+            df['valor'] = df['valor'].map('R${:,.2f}'.format)
+            print(df.to_string(index=False))
+
+    except Exception as e:
+        print(f"\n>> Erro inesperado ao listar betoneiras: {e}", file=sys.stderr)
+    finally:
+        if conn:
+            conn.close()
 
 def listar_betoneiras_disponiveis():
-    conexao = None
-    try:
-        conexao = database.criar_conexao()
-        sql = "SELECT * FROM betoneiras WHERE status=TRUE ORDER BY id_betoneira"
-        df = pd.read_sql(sql, conexao)
-        if df.empty:
-            print("❌ Nenhuma betoneira disponível.")
-        else:
-            print("\n🔎 Betoneiras disponíveis:\n")
-            print(df)
-    except Exception as e:
-        print(f"❌ Erro ao listar betoneiras disponíveis: {e}")
-    finally:
-        if conexao:
-            conexao.close()
 
+    conn = None
+    try:
+        conn = database.criar_conexao()
+        if not conn:
+            print("\n>> Erro de conexão.")
+            return
+
+        sql = "SELECT id, modelo, valor FROM betoneiras WHERE status = 'disponivel' ORDER BY id"
+        
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            df = pd.read_sql(sql, conn)
+
+        if df.empty:
+            print("\n>> Nenhuma betoneira disponível no momento.")
+        else:
+            print("\n--- Betoneiras Disponíveis ---")
+            df['valor'] = df['valor'].map('R${:,.2f}'.format)
+            print(df.to_string(index=False))
+
+    except Exception as e:
+        print(f"\n>> Erro inesperado ao gerar relatório: {e}", file=sys.stderr)
+    finally:
+        if conn:
+            conn.close()
+
+def listar_alugueis_ativos():
+
+    conn = None
+    try:
+        conn = database.criar_conexao()
+        if not conn:
+            print("\n>> Erro de conexão.")
+            return
+
+        sql = """
+            SELECT
+                a.id AS id_aluguel,
+                c.nome AS cliente,
+                b.modelo AS betoneira,
+                a.data_inicio,
+                a.data_prevista_termino
+            FROM alugueis a
+            JOIN clientes c ON a.id_cliente = c.id
+            JOIN betoneiras b ON a.id_betoneira = b.id
+            WHERE a.status = 'ativo'
+            ORDER BY a.data_prevista_termino ASC
+        """
+        
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            df = pd.read_sql(sql, conn)
+        
+        if df.empty:
+            print("\n>> Nenhum aluguel ativo no momento.")
+        else:
+            print("\n--- Aluguéis Ativos ---")
+            print(df.to_string(index=False))
+
+    except Exception as e:
+        print(f"\n>> Erro inesperado ao gerar relatório: {e}", file=sys.stderr)
+    finally:
+        if conn:
+            conn.close()
 
 def historico_alugueis():
-    conexao = None
+
+    conn = None
     try:
-        conexao = database.criar_conexao()
-        sql = "SELECT * FROM alugueis ORDER BY data_aluguel DESC"
-        df = pd.read_sql(sql, conexao)
+        conn = database.criar_conexao()
+        if not conn:
+            print("\n>> Erro de conexão.")
+            return
+
+        sql = """
+            SELECT
+                a.id AS id_aluguel,
+                c.nome AS cliente,
+                b.modelo AS betoneira,
+                a.data_inicio,
+                a.data_termino_real,
+                a.status
+            FROM alugueis a
+            JOIN clientes c ON a.id_cliente = c.id
+            JOIN betoneiras b ON a.id_betoneira = b.id
+            ORDER BY a.data_inicio DESC
+        """
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            df = pd.read_sql(sql, conn)
+
         if df.empty:
-            print("❌ Nenhum histórico encontrado.")
+            print("\n>> Nenhum histórico de aluguel encontrado.")
         else:
-            print("\n🔎 Histórico de Aluguéis:\n")
-            print(df)
+            print("\n--- Histórico de Aluguéis ---")
+            print(df.to_string(index=False))
+
     except Exception as e:
-        print(f"❌ Erro ao consultar histórico de alugueis: {e}")
+        print(f"\n>> Erro inesperado ao consultar histórico: {e}", file=sys.stderr)
     finally:
-        if conexao:
-            conexao.close()
+        if conn:
+            conn.close()

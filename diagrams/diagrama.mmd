@@ -1,25 +1,28 @@
 erDiagram
-    Cliente {
-        int id_cliente PK "Not Null"
-        varchar(100) nome "Not Null"
-        varchar(11) telefone "Not Null"
-        varchar(14) cpf "Not Null"
-    }
 
-    Betoneira {
-        int id_betoneira PK "Not Null"
-        varchar(100) modelo  "Not Null"
-        boolean statuss   "Not Null"
-        real valor   "Not Null"
-    }
+clientes {
+    int id PK "SERIAL"
+    varchar nome "NOT NULL"
+    varchar telefone "NOT NULL, UNIQUE"
+    varchar cpf "NOT NULL, UNIQUE"
+}
 
-    Aluguel{
-        int id_aluguel PK "Not Null"
-        int id_cliente FK "Not Null"
-        int id_betoneira FK "Not Null"
-        date data_inicio "Not Null"
-        date data_fim "Not Null"
-    }
+betoneiras {
+    int id PK "SERIAL"
+    varchar modelo "NOT NULL"
+    real valor "NOT NULL"
+    varchar status "NOT NULL"
+}
 
-    Cliente ||--o{ Aluguel : "faz"
-    Betoneira ||--o{ Aluguel : "é objeto de"
+alugueis {
+    int id PK "SERIAL"
+    int id_cliente FK "NOT NULL"
+    int id_betoneira FK "NOT NULL"
+    date data_inicio "NOT NULL"
+    date data_prevista_termino "NOT NULL"
+    date data_termino_real
+    varchar status "NOT NULL"
+}
+
+clientes ||--o{ alugueis : "realiza"
+betoneiras ||--o{ alugueis : "é alugada em"

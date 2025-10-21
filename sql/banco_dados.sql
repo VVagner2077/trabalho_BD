@@ -1,27 +1,31 @@
-drop table if exists alugueis;
-drop table if exists betoneiras;
-drop table if exists clientes;
+DROP TABLE IF EXISTS alugueis;
+DROP TABLE IF EXISTS betoneiras;
+DROP TABLE IF EXISTS clientes;
 
-create table clientes(
-id_cliente int generated always as identity primary key,
-nome varchar(100) not null,
-telefone varchar(11) not null,
-cpf varchar(14) not null
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(11) NOT NULL,
+    cpf VARCHAR(14) NOT NULL,
+    CONSTRAINT clientes_cpf_key UNIQUE (cpf),
+    CONSTRAINT clientes_telefone_key UNIQUE (telefone)
 );
 
-create table betoneiras(
-id_betoneira int generated always as identity primary key,
-modelo varchar(100) not null,
-statuss boolean not null,
-valor real not null
+CREATE TABLE betoneiras (
+    id SERIAL PRIMARY KEY,
+    modelo VARCHAR(100) NOT NULL,
+    valor REAL NOT NULL,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('disponivel', 'alugada', 'manutencao'))
 );
 
-create table alugueis(
-id_aluguel int generated always as  identity primary key,
-id_cliente int not null,
-id_betoneira int not null,
-data_inicio date not null,
-data_fim date not null,
-foreign key(id_cliente) references clientes(id_cliente),
-foreign key(id_betoneira) references betoneiras(id_betoneira)
+CREATE TABLE alugueis (
+    id SERIAL PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    id_betoneira INT NOT NULL,
+    data_inicio DATE NOT NULL,
+    data_prevista_termino DATE NOT NULL,
+    data_termino_real DATE,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('ativo', 'finalizado')),
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id),
+    FOREIGN KEY (id_betoneira) REFERENCES betoneiras(id)
 );
