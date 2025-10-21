@@ -2,13 +2,50 @@ from controller import cliente_controller, betoneira_controller, alugueis_contro
 from pesquisa import pesquisa
 from utils import inputs_tratados
 import time
+from conexion import database
 
-# --- Funções Auxiliares de Exibição ---
 def pausar_e_limpar():
-    
     input("\nPressione Enter para continuar...")
 
-# --- Gerenciamento de Betoneiras (CRUD) ---
+def exibir_tela_inicializacao():
+    print("\n" + "="*43)
+    print("   GERENCIADOR DE ALUGUEL DE BETONEIRAS")
+    print("="*43)
+    
+    print("\nDesenvolvido por:")
+    print("- Wagner Dos Santos")
+    print("- Gabriel Rodrigo")
+    print("- Micael Ribeiro")
+    
+    print("\n" + "-"*43)
+    print("A verificar o estado da base de dados...")
+    time.sleep(1)
+    
+    conn = None
+    tabelas_para_contar = ['clientes', 'betoneiras', 'alugueis']
+    try:
+        conn = database.criar_conexao()
+        if not conn:
+            print(">> ERRO: Não foi possível continuar devido a uma falha na ligação.")
+            return
+
+        with conn.cursor() as cursor:
+            print("Contagem de registos nas tabelas:")
+            for tabela in tabelas_para_contar:
+                sql = f"SELECT COUNT(1) AS total_{tabela} FROM {tabela}"
+                cursor.execute(sql)
+                total_registos = cursor.fetchone()[0]
+                print(f"  - Tabela '{tabela}': {total_registos} registos.")
+    
+    except Exception as e:
+        print(f">> ERRO ao contar registos na base de dados: {e}")
+    finally:
+        if conn:
+            conn.close()
+            
+    print("-" * 43)
+    pausar_e_limpar()
+
 def gerenciar_betoneiras():
     while True:
         escolha_crud = input('''
@@ -102,7 +139,6 @@ def remover_betoneira():
     except ValueError:
         print("\n>> Erro: ID inválido. Deve ser um número.")
 
-# --- Gerenciamento de Clientes (CRUD) ---
 def gerenciar_clientes():
     while True:
         escolha_crud = input('''
@@ -166,7 +202,6 @@ def remover_cliente():
     except ValueError:
         print("\n>> Erro: ID inválido. Deve ser um número.")
 
-# --- Operações de Aluguel e Menu Principal ---
 def registrar_novo_aluguel():
     print("\n-- Registrar Novo Aluguel --")
     pesquisa.listar_todos_clientes()
@@ -221,12 +256,13 @@ Escolha uma opção: ''')
             pausar_e_limpar()
 
 def menu():
+    exibir_tela_inicializacao()
+
     while True:
         print("\n" + "="*43)
-        print("   GERENCIADOR DE ALUGUEL DE BETONEIRAS")
+        print("             MENU PRINCIPAL")
         print("="*43)
-        print("\nMENU PRINCIPAL\n")
-        print("--- OPERAÇÕES ---")
+        print("\n--- OPERAÇÕES ---")
         print("[1] Registrar Novo Aluguel")
         print("[2] Registrar Devolução")
         print("\n--- CADASTROS ---")
@@ -252,3 +288,4 @@ def menu():
             case _:
                 print(f"\n>> ERRO: Opção '{escolha}' inválida. Tente novamente.")
                 time.sleep(2)
+
