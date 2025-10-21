@@ -109,31 +109,6 @@ Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
-
----
-
-### 🔧 Configuração do Ambiente
-
-1. Crie um ficheiro chamado **`.env`** na pasta `trabalho_BD`.
-2. Copie o conteúdo do ficheiro **`.env.example`** para dentro do novo `.env`.
-3. Preencha a variável `DB_URL` com a sua **URL de ligação completa** do PostgreSQL.
-
----
-
-### 🗃️ Preparar a Base de Dados
-
-1. Certifique-se de que o PostgreSQL está ativo.
-2. Execute o script abaixo para criar as tabelas:
-
-   ```bash
-   psql -U <seu_usuario> -d <sua_base> -f sql/banco_dados.sql
-   ```
-3. Inicie o programa:
-
-   ```bash
-   python -m trabalho_BD.main
-   ```
-
 ---
 
 ## 🐳 Execução com Docker
