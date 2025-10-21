@@ -109,6 +109,11 @@ Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
+
+Rodar o codigo
+```bash
+python main.py
+```
 ---
 
 ## 🐳 Execução com Docker
