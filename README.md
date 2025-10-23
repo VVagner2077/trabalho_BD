@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="./assets/banner.jpg" alt="Sistema de Aluguer de Betoneiras" height="500">
+  <img src="./assets/banner.png" alt="Sistema de Aluguer de Betoneiras" height="500">
 </p>
 
 # 🧱 Sistema de Aluguer de Betoneiras
