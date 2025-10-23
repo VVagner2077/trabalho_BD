@@ -144,4 +144,3 @@ docker run -it --rm --env-file .env aluguer-betoneiras
 * **Micael Ribeiro dos Santos**
 * **Wagner dos Santos Cristo**
 
-oi
